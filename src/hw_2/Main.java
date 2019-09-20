@@ -1,35 +1,62 @@
 package hw_2;
 
+import hw_2.trades.Bond;
+import hw_2.trades.CommoditySpot;
+import hw_2.trades.FxSpot;
+import hw_2.trades.IrSwap;
+
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        //String path = "E:\\study\\java_hw\\src\\hw_2\\trades.txt";
-        if (args.length == 0) {
-            System.err.println("No input file");
-            System.exit(1);
-        }
-        String path = args[0];
 
-        if (!Files.exists(Paths.get(path))) {
-            System.err.println("File doesn't exist");
-            System.exit(2);
+        //1 - считывание из заранее заданного пути, 0 - считывание из параметров запуска
+
+        boolean testFlag = true;
+        String path;
+
+        if (testFlag) {
+            path = "D:\\java_hw\\src\\hw_2\\trades\\BOND.txt";
+        } else {
+            if (args.length == 0) {
+                System.err.println("No input file");
+                System.exit(1);
+            }
+            path = args[0];
+        }
+        String buff, type;
+        double price;
+
+        BufferedReader buffReader = new BufferedReader(new FileReader(path));
+
+        buff = buffReader.readLine(); // пропуск первой строки
+
+        buff = buffReader.readLine();
+        type = buff.split("=")[1];
+
+        buff = buffReader.readLine();
+        price = Double.parseDouble(buff.split("=")[1]);
+
+        // 1-й способ через switch
+        switch (type) {
+            case "FX_SPOT":
+                Trade fxSpot = new FxSpot(price);
+                break;
+            case "BOND":
+                Trade bond = new Bond(price);
+                break;
+            case "COMMODITY_SPOT":
+                Trade commoditySpot = new CommoditySpot(price);
+                break;
+            case "IR_SWAP":
+                Trade irSwap = new IrSwap(price);
+                break;
         }
 
-        List<String> lines;
-        lines = Files.readAllLines(Paths.get(path));
+        // 2-й способ через Enum + abstract createTrade
+        Trade trade = TradeType.valueOf(type).createTrade(price);
 
-        Trade[] arrTrade = new Trade[lines.size() / 2];
-        for (int i = 0; i < lines.size(); i += 2) {
-            arrTrade[i / 2] = createTrade(lines.get(i), Double.valueOf(lines.get(i + 1)));
-        }
 
     }
 
-    public static Trade createTrade(String type, double price) {
-        return new Trade(TradeType.valueOf(type), price);
-    }
 }

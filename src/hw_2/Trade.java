@@ -1,19 +1,12 @@
 package hw_2;
 
 public class Trade {
-    private TradeType type;
-    private double price;
+    final private double price;
 
-    public Trade(TradeType type, double price) {
-        this.type = type;
+    public Trade(double price) {
         this.price = price;
     }
 
-    public String type(){
-        return type.name();
-    }
 
-    public double price(){
-        return price;
-    }
+    public double price() { return price; }
 }

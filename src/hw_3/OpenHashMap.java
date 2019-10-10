@@ -1,10 +1,11 @@
 package hw_3;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class OpenHashMap<Key, Value> {
     private final int INITIAL_CAPASITY = 16;
-
     private final float DEFAULT_LOAD_FACTOR = 0.75f;
 
     private int size;
@@ -143,5 +144,15 @@ public class OpenHashMap<Key, Value> {
 
     public int size() {
         return size;
+    }
+
+    public Set<Key> getKeys(){
+        Set<Key> keySet = new HashSet<>();
+        for (int i = 0; i < capacity; ++i){
+            if (exist[i]){
+                keySet.add((Key)keys[i]);
+            }
+        }
+        return keySet;
     }
 }
